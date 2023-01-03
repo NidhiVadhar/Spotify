@@ -54,29 +54,30 @@ progressBar.addEventListener('change', ()=> {
     audioEle.currentTime = ((progressBar.value * audioEle.duration)/100)
 })
 
-const makeallPlays = ()=> {
     Array.from(document.getElementsByClassName('songItemPlay')).forEach((element) => {
-        element.classList.remove("fa-pause-circle");
-        element.classList.add("fa-play-circle");
+        element.addEventListener('click' , (e)=> {
+            if(audioEle.paused || audioEle.currentTime <=0){
+                songIndex = parseInt(e.target.id);
+                audioEle.src = `${songIndex}.mp3`;
+                audioEle.currentTime = 0;
+                mastersong.innerText = songs[songIndex-1].songName;
+                audioEle.play();
+                element.classList.remove('fa-play-circle');
+                element.classList.add('fa-pause-circle');
+                gif.style.opacity = 1;
+                masterPlay.classList.remove("fa-play-circle");
+                masterPlay.classList.add("fa-pause-circle");
+            }
+            else{
+                audioEle.pause();
+                element.classList.remove('fa-pause-circle');
+                element.classList.add('fa-play-circle');
+                masterPlay.classList.add("fa-play-circle");
+                masterPlay.classList.remove("fa-pause-circle");
+                gif.style.opacity = 0;
+            }
+        })
     })
-
-}
-
-Array.from(document.getElementsByClassName('songItemPlay')).forEach((element) => {
-    element.addEventListener('click', (e)=>{
-        makeallPlays();
-        gif.style.opacity = 1;
-        songIndex = parseInt(e.target.id);
-        e.target.classList.remove("fa-play-circle");
-        e.target.classList.add("fa-pause-circle");
-        audioEle.src = `${songIndex}.mp3`;
-        audioEle.currentTime = 0;
-        mastersong.innerText = songs[songIndex-1].songName;
-        audioEle.play();
-        masterPlay.classList.remove("fa-play-circle");
-        masterPlay.classList.add("fa-pause-circle");
-    })
-});
 
 document.getElementById('next').addEventListener('click', ()=>{
     if(songIndex >= 7){
